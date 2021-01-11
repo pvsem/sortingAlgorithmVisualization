@@ -12,46 +12,65 @@ function randomInteger(min, max) {
 
 export class App extends React.Component {
   state = {
-    entries: '',
+    entries: "",
     entriesArr: [],
     sortMethod: "bubbleSort",
   };
 
   handleEntriesChange = (e) => {
-	const entries = e.target.value ? Number(e.target.value) : ''
+    const entries = e.target.value ? Number(e.target.value) : "";
     this.setState({ entries });
   };
 
   handleStartClick = (e) => {
-	e.preventDefault();
-	if(this.state.entries < 2 || this.state.entries > 155){
-		alert('Value should be in 2-155 range!')
-		return;
-	}
+    e.preventDefault();
+    if (this.state.entries < 2 || this.state.entries > 155) {
+      alert("Value should be in 2-155 range!");
+      return;
+    }
     const entriesArr = Array.from({ length: this.state.entries }).map(() => ({
       value: randomInteger(1, 800),
-      isActive: false,
+      color: "#0088cc",
     }));
-	this.setState({ entriesArr });
+    this.generator = sortMethods[this.state.sortMethod](entriesArr.concat());
+    this.setState({ entriesArr });
   };
 
   handleSortClick = (e) => {
     e.preventDefault();
-    this.setState((state) => ({
-      entriesArr: sortMethods[state.sortMethod](state.entriesArr.concat()),
-    }));
+    this.setState({
+      //if sort is clicked after next step take last value (arr) from generator
+      entriesArr: Array.from(this.generator)
+        .slice(-1)[0]
+        .map((item) => ({ ...item, color: "green" })),
+    });
   };
 
   handleSortChange = (e) => {
-	  this.setState({sortMethod: e.target.value})
-  }
+    this.setState({ sortMethod: e.target.value });
+  };
+
+  handleNextStepClick = (e) => {
+    e.preventDefault();
+    const { value: entriesArr, done } = this.generator.next();
+    if (entriesArr) {
+      this.setState({
+        entriesArr: done
+          ? entriesArr.map((item) => ({
+              ...item,
+              color: "green",
+            }))
+          : entriesArr,
+      });
+    }
+  };
 
   render() {
     return (
       <div className="App">
         <Header
-		  sortMethod={this.state.sortMethod}
-		  onSortMethodChange={this.handleSortChange}
+          sortMethod={this.state.sortMethod}
+          onSortMethodChange={this.handleSortChange}
           entries={this.state.entries}
           onEntriesChange={this.handleEntriesChange}
           onStartClick={this.handleStartClick}
@@ -59,6 +78,7 @@ export class App extends React.Component {
         <Main
           entriesArr={this.state.entriesArr}
           onSortClick={this.handleSortClick}
+          onNextStepClick={this.handleNextStepClick}
         />
         <Footer />
       </div>

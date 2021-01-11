@@ -24,12 +24,7 @@ body{
   border: 1px solid white;
   margin-top: auto;
 }
-.canvas {
-  width: 90vw;
-  height: 70vh;
-  background-color: white;
-  margin-top: auto;
-}
+
 .footer {
   background-color: #282c34;
   color:white;
@@ -52,7 +47,7 @@ button{
   border-radius: 4px;
   background:transparent;
   color:white;
-  width:50px;
+  min-width:50px;
   height: 30px;
   transition: all .4s ease-in-out;
   margin-right: 8px ;

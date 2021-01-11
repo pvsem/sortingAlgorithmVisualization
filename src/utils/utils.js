@@ -1,17 +1,15 @@
 /* Bubble sort: repeatedly swap the adjacent elements if 
 they are in wrong order */
-export function bubbleSort(arr) {
+export function* bubbleSort(arr) {
   const length = arr.length;
-  //let isSorted;
 
   for (let i = 0; i < length; i++) {
-    //isSorted = true;
     for (let j = 0; j < length - i - 1; j++) {
       if (arr[j].value > arr[j + 1].value) {
         swap(arr, j, j + 1);
-        //isSorted = false;
+        highlight(arr, j, j + 1);
+        yield arr;
       }
-      //if(isSorted) return;
     }
   }
   return arr;
@@ -22,12 +20,14 @@ export function bubbleSort(arr) {
 2: Compare the current element (key) to its predecessor.
 3: If the key element is smaller than its predecessor, compare it to the elements before.
 Move the greater elements one position up to make space for the swapped element. */
-export function insertionSort(arr) {
+export function* insertionSort(arr) {
   for (let i = 1; i < arr.length; i++) {
     let j = i;
     while (j > 0 && arr[j - 1].value > arr[j].value) {
-      swap(arr, j, j - 1);
-      j = j - 1;
+	  swap(arr, j, j - 1);
+	  highlight(arr,j,j-1)
+	  j = j - 1;
+	  yield arr;
     }
   }
   return arr;
@@ -42,16 +42,18 @@ in the unsorted sublist, exchanging (swapping) it with the leftmost unsorted ele
 (putting it in sorted order), and moving the sublist boundaries one element to the right. */
 /* iMin - current minimum (index of a current minimum item to be precise)
 i - current item (index of a current item) */
-export function selectionSort(arr) {
+export function* selectionSort(arr) {
   const length = arr.length;
   for (let j = 0; j < length - 1; j++) {
     let iMin = j;
 
     for (let i = j + 1; i < length; i++) {
-      if (arr[i] < arr[iMin]) iMin = i;
+      if (arr[i].value < arr[iMin].value) iMin = i;
     }
     if (iMin !== j) {
-      swap(arr, j, iMin);
+	  swap(arr, j, iMin);
+	  highlight(arr,j,iMin);
+	  yield arr;
     }
   }
   return arr;
@@ -62,14 +64,16 @@ export function selectionSort(arr) {
 is always greater than its children is called a max-heap.)
 2) Deleting the root element(and put it in last position)
 3) Heapify(fix the max-heap) */
-export function heapSort(arr) {
+export function* heapSort(arr) {
   let length = arr.length;
   for (let i = Math.floor(length / 2) - 1; i >= 0; i--) {
     max_heapify(arr, i, length); //Building max heap
   }
   for (let i = length - 1; i >= 0; i--) {
     swap(arr, 0, i); //Deleting root element
-    max_heapify(arr, 0, i); //Building max heap again
+	max_heapify(arr, 0, i); //Building max heap again
+	highlight(arr,0,i)
+	yield arr;
   }
   return arr;
 }
@@ -80,7 +84,7 @@ function max_heapify(arr, i, length) {
   let maximum;
   if (right < length) {
     //Checks if right child exist
-    if (arr[left] >= arr[right]) {
+    if (arr[left].value >= arr[right].value) {
       //Compares children to find maximum
       maximum = left;
     } else {
@@ -90,7 +94,7 @@ function max_heapify(arr, i, length) {
     //Checks if left child exists
     maximum = left;
   } else return; //In case of no children return
-  if (arr[i] < arr[maximum]) {
+  if (arr[i].value < arr[maximum].value) {
     //Checks if the largest child is greater than parent
     swap(arr, i, maximum); //If it is then swap both
     max_heapify(arr, maximum, length); //max-heapify again
@@ -103,7 +107,7 @@ function max_heapify(arr, i, length) {
 each containing one element (a list of one element is considered sorted).
 2) Repeatedly merge sublists to produce new sorted sublists
 until there is only one sublist remaining. This will be the sorted list. */
-export function mergeSort(arr) {
+export function* mergeSort(arr) {
   if (arr.length === 1) {
     return arr;
   }
@@ -117,7 +121,7 @@ function merge(left, right) {
   const arr = [];
 
   while (left.length && right.length) {
-    if (left[0] < right[0]) {
+    if (left[0].value < right[0].value) {
       arr.push(left.shift());
     } else {
       arr.push(right.shift());
@@ -130,7 +134,7 @@ function merge(left, right) {
 and partitioning the other elements into two sub-arrays, 
 according to whether they are less than or greater than the pivot. 
 The sub-arrays are then sorted recursively. */
-export function quickSort(arr, start, end) {
+export function* quickSort(arr, start, end) {
   if (start >= end) {
     return;
   }
@@ -150,11 +154,19 @@ function partition(arr, start, end) {
   let pivotIndex = start;
   let pivotValue = arr[end];
   for (let i = start; i < end; i++) {
-    if (arr[i] < pivotValue) {
-      swap(arr, i, pivotIndex);
+    if (arr[i].value < pivotValue.value) {
+	  swap(arr, i, pivotIndex);
+	  highlight(arr,i,pivotIndex);
       pivotIndex++;
     }
   }
   swap(arr, pivotIndex, end);
+  highlight(arr,pivotIndex,end)
   return pivotIndex;
+}
+
+function highlight(arr, a, b) {
+  arr.forEach((item) => (item.color = "#0088cc"));
+  arr[a].color = "red";
+  arr[b].color = "red";
 }
