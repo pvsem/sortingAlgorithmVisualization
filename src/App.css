@@ -90,6 +90,7 @@ input{
   border: 1px solid white;
   line-height: 18px;
   min-width: 170px;
+  margin-right: 8px;
 }
 input::placeholder{
   color:white;
@@ -102,4 +103,29 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
+}
+select{
+  width: 200px;
+  height: 30px;
+  margin-right: 8px;
+  border: solid 2px white;
+  border-radius: 4px;
+  margin-top: 10px;
+  color:white;
+  background: transparent;
+  margin-left: 8px;
+}
+select:hover{
+  cursor: pointer;
+}
+select::placeholder{
+  color:white;
+  line-height: 18px;
+}
+select:focus{
+  outline: none;
+}
+label{
+  color:white;
+
 }
