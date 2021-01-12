@@ -37,13 +37,16 @@ export class App extends React.Component {
   };
 
   handleSortClick = (e) => {
-    e.preventDefault();
-    this.setState({
-      //if sort is clicked after next step take last value (arr) from generator
-      entriesArr: Array.from(this.generator)
-        .slice(-1)[0]
-        .map((item) => ({ ...item, color: "green" })),
-    });
+	e.preventDefault();
+	const {entriesArr} = this.state.entriesArr
+    if (entriesArr) {
+      this.setState({
+        //if sort is clicked after next step take last value (arr) from generator
+        entriesArr: Array.from(this.generator)
+          .slice(-1)[0]
+          .map((item) => ({ ...item, color: "green" })),
+      });
+    }
   };
 
   handleSortChange = (e) => {
