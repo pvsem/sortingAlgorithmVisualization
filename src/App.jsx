@@ -32,20 +32,52 @@ export class App extends React.Component {
       value: randomInteger(1, 800),
       color: "#0088cc",
     }));
-    this.generator = sortMethods[this.state.sortMethod](entriesArr.concat());
+    if (this.state.sortMethod === "quickSort") {
+      this.generator = entriesArr;
+    } else {
+      this.generator = sortMethods[this.state.sortMethod](entriesArr);
+    }
     this.setState({ entriesArr });
   };
 
   handleSortClick = (e) => {
-	e.preventDefault();
-	const {entriesArr} = this.state.entriesArr
-    if (entriesArr) {
+    e.preventDefault();
+    const { entriesArr, sortMethod } = this.state;
+	const [lastArrFromGenerator] = Array.from(this.generator).slice(-1);
+	console.log(lastArrFromGenerator)
+    if (sortMethod === "quickSort") {
+      this.generator = sortMethods[this.state.sortMethod](
+        entriesArr,
+        0,
+        entriesArr.length - 1
+      );
       this.setState({
-        //if sort is clicked after next step take last value (arr) from generator
-        entriesArr: Array.from(this.generator)
-          .slice(-1)[0]
-          .map((item) => ({ ...item, color: "green" })),
+        entriesArr: this.generator.map((item) => ({
+          ...item,
+          color: "green",
+        })),
       });
+    } else {
+      if (!Array.isArray(this.generator)) {
+        if (lastArrFromGenerator) {
+          if (entriesArr) {
+            this.setState({
+              //if sort is clicked after next step take last value (arr) from generator
+              entriesArr: lastArrFromGenerator.map((item) => ({
+                ...item,
+                color: "green",
+              })),
+            });
+          }
+        }
+      } else {
+        this.setState({
+          entriesArr: this.generator.map((item) => ({
+            ...item,
+            color: "green",
+          })),
+        });
+      }
     }
   };
 

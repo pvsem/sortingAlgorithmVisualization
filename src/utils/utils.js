@@ -107,11 +107,11 @@ function max_heapify(arr, i, length) {
 each containing one element (a list of one element is considered sorted).
 2) Repeatedly merge sublists to produce new sorted sublists
 until there is only one sublist remaining. This will be the sorted list. */
-export function* mergeSort(arr) {
+export function mergeSort(arr) {
   if (arr.length === 1) {
     return arr;
   }
-  const middle = Math.floor(arr.length / 2);
+  const middle = Math.ceil(arr.length / 2);
   let left = arr.slice(0, middle);
   let right = arr.slice(middle);
   return merge(mergeSort(left), mergeSort(right));
@@ -134,7 +134,7 @@ function merge(left, right) {
 and partitioning the other elements into two sub-arrays, 
 according to whether they are less than or greater than the pivot. 
 The sub-arrays are then sorted recursively. */
-export function* quickSort(arr, start, end) {
+export function quickSort(arr, start, end) {
   if (start >= end) {
     return;
   }
@@ -156,12 +156,10 @@ function partition(arr, start, end) {
   for (let i = start; i < end; i++) {
     if (arr[i].value < pivotValue.value) {
 	  swap(arr, i, pivotIndex);
-	  highlight(arr,i,pivotIndex);
       pivotIndex++;
     }
   }
   swap(arr, pivotIndex, end);
-  highlight(arr,pivotIndex,end)
   return pivotIndex;
 }
 
