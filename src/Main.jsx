@@ -9,7 +9,7 @@ export class Main extends React.Component {
                 {this.props.entriesArr.length ? (
                     <div className='sort-buttons'>
                         <Button onClick={this.props.onSortClick} label='Sort!' />
-                        {this.props.sortMethod === 'mergeSort' || this.props.sortMethod === 'quickSort' ? null : (
+                        {this.props.sortMethod === 'quickSort' ? null : (
                             <Button onClick={this.props.onNextStepClick} label='Next step' />
                         )}
                     </div>
