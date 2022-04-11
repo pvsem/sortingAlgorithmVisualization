@@ -24,10 +24,10 @@ export function* insertionSort(arr) {
   for (let i = 1; i < arr.length; i++) {
     let j = i;
     while (j > 0 && arr[j - 1].value > arr[j].value) {
-	  swap(arr, j, j - 1);
-	  highlight(arr,j,j-1)
-	  j = j - 1;
-	  yield arr;
+      swap(arr, j, j - 1);
+      highlight(arr, j, j - 1)
+      j = j - 1;
+      yield arr;
     }
   }
   return arr;
@@ -51,9 +51,9 @@ export function* selectionSort(arr) {
       if (arr[i].value < arr[iMin].value) iMin = i;
     }
     if (iMin !== j) {
-	  swap(arr, j, iMin);
-	  highlight(arr,j,iMin);
-	  yield arr;
+      swap(arr, j, iMin);
+      highlight(arr, j, iMin);
+      yield arr;
     }
   }
   return arr;
@@ -71,9 +71,9 @@ export function* heapSort(arr) {
   }
   for (let i = length - 1; i >= 0; i--) {
     swap(arr, 0, i); //Deleting root element
-	max_heapify(arr, 0, i); //Building max heap again
-	highlight(arr,0,i)
-	yield arr;
+    max_heapify(arr, 0, i); //Building max heap again
+    highlight(arr, 0, i)
+    yield arr;
   }
   return arr;
 }
@@ -144,23 +144,23 @@ export function quickSort(arr, start, end) {
   return arr;
 }
 
-function swap(arr, a, b) {
-  let temp = arr[a];
-  arr[a] = arr[b];
-  arr[b] = temp;
-}
-
 function partition(arr, start, end) {
   let pivotIndex = start;
   let pivotValue = arr[end];
   for (let i = start; i < end; i++) {
     if (arr[i].value < pivotValue.value) {
-	  swap(arr, i, pivotIndex);
+      swap(arr, i, pivotIndex);
       pivotIndex++;
     }
   }
   swap(arr, pivotIndex, end);
   return pivotIndex;
+}
+
+function swap(arr, a, b) {
+  let temp = arr[a];
+  arr[a] = arr[b];
+  arr[b] = temp;
 }
 
 function highlight(arr, a, b) {
