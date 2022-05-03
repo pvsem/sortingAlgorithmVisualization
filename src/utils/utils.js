@@ -133,28 +133,26 @@ function merge(left, right) {
 /* quick sort: It works by selecting a 'pivot' element from the array 
 and partitioning the other elements into two sub-arrays, 
 according to whether they are less than or greater than the pivot. 
-The sub-arrays are then sorted recursively. */
-export function quickSort(arr, start, end) {
-  if (start >= end) {
-    return;
+The sub-arrays are then sorted recursively. [9,3,4,6,5] */
+export function quickSort(arr) {
+  if (arr.length <= 1) {
+    return arr;
   }
-  let index = partition(arr, start, end);
-  quickSort(arr, start, index - 1);
-  quickSort(arr, index + 1, end);
-  return arr;
-}
-
-function partition(arr, start, end) {
-  let pivotIndex = start;
-  let pivotValue = arr[end];
-  for (let i = start; i < end; i++) {
-    if (arr[i].value < pivotValue.value) {
-      swap(arr, i, pivotIndex);
-      pivotIndex++;
+  let pivotIndex = Math.floor(arr.length - 1 / 2)
+  let less = []
+  let greater = []
+  let pivot = arr[pivotIndex]
+  for (let i = 0; i < arr.length; i++) {
+    if (i === pivotIndex) {
+      continue
+    }
+    if (arr[i].value > pivot.value) {
+      greater.push(arr[i])
+    } else {
+      less.push(arr[i])
     }
   }
-  swap(arr, pivotIndex, end);
-  return pivotIndex;
+  return [...quickSort(less), pivot, ...quickSort(greater)]
 }
 
 function swap(arr, a, b) {

@@ -22,8 +22,7 @@ export class App extends React.Component {
         this.setState({ entries });
     };
 
-    handleStartClick = (e) => {
-        // e.preventDefault();
+    handleStartClick = () => {
         if (this.state.entries < 2 || this.state.entries > 155) {
             alert('Value should be in 2-155 range!');
             return;
@@ -32,48 +31,28 @@ export class App extends React.Component {
             value: randomInteger(1, 800),
             color: '#0088cc',
         }));
-        if (this.state.sortMethod === 'quickSort') {
-            this.generator = entriesArr;
-        } else {
-            this.generator = sortMethods[this.state.sortMethod](entriesArr);
-        }
-        console.log(this.generator);
+        this.generator = sortMethods[this.state.sortMethod](entriesArr);
         this.setState({ entriesArr });
     };
 
-    handleSortClick = (e) => {
-        // e.preventDefault();
-        const { entriesArr, sortMethod } = this.state;
+    handleSortClick = () => {
+        const { entriesArr } = this.state;
         const [lastArrFromGenerator] = Array.from(this.generator).slice(-1);
-        if (sortMethod === 'quickSort') {
-            this.generator = sortMethods[this.state.sortMethod](entriesArr, 0, entriesArr.length - 1);
+        if (!Array.isArray(this.generator) && lastArrFromGenerator && entriesArr) {
+            this.setState({
+                //if sort is clicked after next step take last value (arr) from generator
+                entriesArr: lastArrFromGenerator.map((item) => ({
+                    ...item,
+                    color: 'green',
+                })),
+            });
+        } else {
             this.setState({
                 entriesArr: this.generator.map((item) => ({
                     ...item,
                     color: 'green',
                 })),
             });
-        } else {
-            if (!Array.isArray(this.generator)) {
-                if (lastArrFromGenerator) {
-                    if (entriesArr) {
-                        this.setState({
-                            //if sort is clicked after next step take last value (arr) from generator
-                            entriesArr: lastArrFromGenerator.map((item) => ({
-                                ...item,
-                                color: 'green',
-                            })),
-                        });
-                    }
-                }
-            } else {
-                this.setState({
-                    entriesArr: this.generator.map((item) => ({
-                        ...item,
-                        color: 'green',
-                    })),
-                });
-            }
         }
     };
 
@@ -81,8 +60,7 @@ export class App extends React.Component {
         this.setState({ sortMethod: e.target.value });
     };
 
-    handleNextStepClick = (e) => {
-        // e.preventDefault();
+    handleNextStepClick = () => {
         const { value: entriesArr, done } = this.generator.next();
         if (entriesArr) {
             this.setState({
